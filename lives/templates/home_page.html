@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% block 'content' %}
+<section class="shadow-card theme-select" style=" padding:20px;margin:10px; border-radius:10px">
+    <div class="card" style="padding:10px 10px 0px 10px; margin:10px">
+        <div class="d-flex">
+            <div class="mr-auto p-2 align-self-center"><h3> {{ fac.nome }}</h3></div>
+
+            <div class="form-group d-flex p-2">
+                <label class="form-label p-2" for="facSelect">Fac:</label>
+                <select class="form-control" id="facSelect" style="max-width:150px">
+                    <option selected disabled>Selecione a fac</option>
+                    {% for fac in facs %}
+                    <a href="www.google.com">
+                        <option value="{{ fac.pk }}"> {{ fac.nome }}</option>
+                    </a>
+                    {% endfor %}
+
+                </select>
+            </div>
+
+
+            <div class="dropdown p-2">
+                <button class="btn btn-md btn-primary btn-addon m-b-10 m-l-5 dropdown-toggle" type="button"
+                        data-toggle="dropdown" aria-expanded="false"><i class="ti-plus"></i> Adicionar
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#" data-toggle="modal"
+                       data-target="#MOdalAdicionarVeiculo">FAC</a>
+                    <a class="dropdown-item" href="#" data-toggle="modal"
+                       data-target="#MOdalAdicionarCanal">Streamer</a>
+
+                </div>
+            </div>
+            <div class="p-2">
+                <form method="post" action="#" class="input-group"
+                      style="max-width: 200px; margin-left:auto; float:right ">
+                    <input type="hidden" name="csrfmiddlewaretoken"
+                           value="dVP1lUMwIuWRiDiYoqjV45BnrByr4N4i812nz3CNUIfY45Z3OeBluPmwB5bn77bn">
+                    <input type="search" class="form-control rounded" placeholder="Buscar" aria-label="Search"
+                           aria-describedby="search-addon" id="myFilter" onkeyup="myFunction()">
+                    <button type="submit" class="btn btn-primary disabled" disabled=""><i class="ti-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="modal fade" data-backdrop="static" id="MOdalAdicionarVeiculo" tabindex="-1" role="dialog"
+             aria-labelledby="ModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="veiculoModalCenterTitle">Adicionar FAC</h5>
+                    </div>
+                    <form method="post" action="{% url 'add_fac' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="modal-body d-flex justify-content">
+                            <div style="margin:10px; padding:5px; width:100%; max-height:400px; overflow-y: auto;">
+                                <div class="form-group">
+                                    <label>Nome da FAC</label>
+                                    <input type="text" class="form-control" placeholder="" name="name_fac">
+                                </div>
+                                <div class="form-group">
+                                    <label>Descrição</label>
+                                    <input type="text" class="form-control" placeholder="" name="desc_fac">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <div class="mr-auto">
+                                <i class="mr-auto"> - Preencha os campos adequadamente </i> <br>
+                            </div>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                            <button type="submit" class="btn btn-primary">Enviar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" data-backdrop="static" id="MOdalAdicionarCanal" tabindex="-1" role="dialog"
+             aria-labelledby="ModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="canelModalCenterTitle">Adicionar FAC</h5>
+                    </div>
+                    <form method="post" action="{% url 'add_streamer' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="modal-body d-flex justify-content">
+
+                            <div style="margin:10px; padding:5px; width:100%; max-height:400px; overflow-y: auto;">
+                                <div class="form-group">
+                                    <label>Fac:</label>
+                                    <select class="form-control" name="selectFacPlayer" required>
+                                        <option selected disabled>Selecione a fac</option>
+                                        {% for fac in facs %}
+                                        <option value="{{ fac.pk }}"> {{ fac.nome }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Nome do canal</label>
+                                    <input type="text" class="form-control" placeholder="" name="name_canal">
+                                </div>
+                                <div class="form-group">
+                                    <label>Nome do canal</label>
+                                    <input type="text" class="form-control" placeholder="" name="name_nick">
+                                </div>
+                                <div class="form-group">
+                                    <label>Link Youtube</label>
+                                    <input type="text" class="form-control" placeholder="" name="name_yt">
+                                </div>
+                                <div class="form-group">
+                                    <label>Link Kick</label>
+                                    <input type="text" class="form-control" placeholder="" name="name_kick">
+                                </div>
+                                <div class="form-group">
+                                    <label>Link Twitch</label>
+                                    <input type="text" class="form-control" placeholder="" name="name_tw">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <div class="mr-auto">
+                                <i class="mr-auto"> - Preencha os campos adequadamente </i> <br>
+                            </div>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                            <button type="submit" class="btn btn-primary">Enviar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card" style="padding:10px 10px 10px 10px; margin:10px">
+        <div class="card" style="" id="card_tabela">
+            <table class="table theme-select" id="tabela_1">
+                <thead class="thead-dark ">
+                <tr>
+                    <th scope="col">N°</th>
+                    <th scope="col">Nome do canal</th>
+                    <th scope="col">Nick em game</th>
+                    <th scope="col">fac</th>
+                    <th scope="col">Canais</th>
+                    <th scope="col">Opçoes</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {% for canal in canais %}
+                <tr>
+                    <th scope="row">1</th>
+                    <td>{{ canal.nome }}</td>
+                    <td>{{ canal.nick_player }}</td>
+                    <td>{{ canal.fac_player.nome }}</td>
+                    <td>
+                        <a class="btn btn-outline-danger btn-sm" href="{{ canal.link_yt }}" target="_blank"><img
+                                src="https://img.icons8.com/?size=100&id=fN3hHbnVavBm&format=png&color=000000"
+                                width="25px"
+                                height="25px">
+                        </a>
+                        <a class="btn btn-outline-secondary btn-sm" href="{{ canal.link_tw }}" target="_blank"><img
+                                src="https://img.icons8.com/?size=100&id=18103&format=png&color=000000" width="25px"
+                                height="25px">
+                        </a>
+
+                        <a class="btn btn-outline-success btn-sm" href="{{ canal.link_kick }}" target="_blank"><img
+                                src="https://cdn.brandfetch.io/id3gkQXO6j/w/400/h/400/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1752548681236"
+                                width="25px"
+                                height="25px">
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-sm" href="{% url 'del_canal' pk=canal.id %}"><img
+                                src="https://img.icons8.com/?size=100&id=1941&format=png&color=000000"
+                                width="25px"
+                                height="25px">
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</section>
+
+<script>
+    document.getElementById('facSelect').addEventListener('change', function() {
+        const pk = this.value;
+        if (pk) {
+            const url = "{% url 'show_live_fac' 0 %}".replace('0', pk);
+            window.location.href = url;
+        }
+    });
+</script>
+{% endblock %}
