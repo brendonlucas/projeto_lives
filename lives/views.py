@@ -41,6 +41,7 @@ def show_live_fac(request, pk):
         facs = Fac.objects.all()
         canais = Canal.objects.filter(fac_player=pk)
         print(canais)
+        print(canais, type(canais))
         return render(request, '../templates/home_page.html',
                       {'facs': facs, 'fac': fac, 'canais': canais})
 

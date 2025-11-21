@@ -1,0 +1,33 @@
+<table id="tabela_1">
+    <thead>
+    <tr>
+        <th scope="col">N°</th>
+        <th scope="col">Nome do canal</th>
+        <th scope="col">Nick em game</th>
+        <th scope="col">fac</th>
+        <th scope="col">Canais</th>
+        <th scope="col">Opçoes</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for canal in canais %}
+    <tr>
+        <th scope="row">1</th>
+        <td>{{ canal.nome }}</td>
+        <td>{{ canal.nick_player }}</td>
+        <td>{{ canal.fac_player.nome }}</td>
+        <td>
+            <a href="1" target="_blank"><img src="" width="25px" height="25px">
+                <b>OFF</b>
+            </a>
+            <a href="2" target="_blank"><img src="" width="25px" height="25px">
+                <b>LIVE</b>
+            </a>
+            <a href="3" target="_blank"><img src="" width="25px" height="25px">
+                <b>OFF</b>
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>

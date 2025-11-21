@@ -32,15 +32,15 @@
                 </div>
             </div>
             <div class="p-2">
-                <form method="post" action="#" class="input-group"
-                      style="max-width: 200px; margin-left:auto; float:right ">
-                    <input type="hidden" name="csrfmiddlewaretoken"
-                           value="dVP1lUMwIuWRiDiYoqjV45BnrByr4N4i812nz3CNUIfY45Z3OeBluPmwB5bn77bn">
-                    <input type="search" class="form-control rounded" placeholder="Buscar" aria-label="Search"
-                           aria-describedby="search-addon" id="myFilter" onkeyup="myFunction()">
-                    <button type="submit" class="btn btn-primary disabled" disabled=""><i class="ti-search"></i>
-                    </button>
-                </form>
+<!--                <form method="post" action="#" class="input-group"-->
+<!--                      style="max-width: 200px; margin-left:auto; float:right ">-->
+<!--                    <input type="hidden" name="csrfmiddlewaretoken"-->
+<!--                           value="dVP1lUMwIuWRiDiYoqjV45BnrByr4N4i812nz3CNUIfY45Z3OeBluPmwB5bn77bn">-->
+<!--                    <input type="search" class="form-control rounded" placeholder="Buscar" aria-label="Search"-->
+<!--                           aria-describedby="search-addon" id="myFilter" onkeyup="myFunction()">-->
+<!--                    <button type="submit" class="btn btn-primary" ><i class="ti-search"></i></button>-->
+<!--                </form>-->
+                <button type="submit" class="btn btn-primary" onclick="ordenarTabela()"><i class="ti-search"></i> ordenar</button>
             </div>
         </div>
 
@@ -162,16 +162,43 @@
                                 src="https://img.icons8.com/?size=100&id=fN3hHbnVavBm&format=png&color=000000"
                                 width="25px"
                                 height="25px">
+                            <b>OFF</b>
                         </a>
                         <a class="btn btn-outline-secondary btn-sm" href="{{ canal.link_tw }}" target="_blank"><img
                                 src="https://img.icons8.com/?size=100&id=18103&format=png&color=000000" width="25px"
                                 height="25px">
+                            <b id="statusTag{{ canal.nome }}">OFF</b>
                         </a>
+                        <script>
+                            async function checkTwitchStatus() {
+                                const channel = "{{ canal.nome }}";
+                                const url = `https://decapi.me/twitch/uptime/${channel}`;
+                                try {
+                                    const response = await fetch(url);
+                                    const text = await response.text();
+                                    const statusTag = document.getElementById("statusTag{{ canal.nome }}");
+                                    if (text.toLowerCase().includes("offline")) {
+                                        statusTag.textContent = "OFF";
+                                        console.log(text);
+                                    }
+                                    else {
+                                        statusTag.textContent = "LIVE";
+                                        console.log(text);
+                                    }
+                                } catch (error) {
+                                    console.error("Erro ao consultar API decapi.me", error);
+                                }
+                            }
+
+                            checkTwitchStatus();
+                        </script>
+
 
                         <a class="btn btn-outline-success btn-sm" href="{{ canal.link_kick }}" target="_blank"><img
                                 src="https://cdn.brandfetch.io/id3gkQXO6j/w/400/h/400/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1752548681236"
                                 width="25px"
                                 height="25px">
+                            <b>OFF</b>
                         </a>
                     </td>
                     <td>
@@ -199,4 +226,94 @@
         }
     });
 </script>
+
+<script>
+function ordenarTabela() {
+    const tabela = document.getElementById("tabela_1");
+    const tbody = tabela.querySelector("tbody");
+    const linhas = Array.from(tbody.querySelectorAll("tr"));
+
+    const processadas = [];
+
+    linhas.forEach((linha, index) => {
+        const colunaCanais = linha.querySelector("td:nth-child(5)");
+        const segundoLink = colunaCanais.querySelectorAll("a")[1];
+        const status = segundoLink.querySelector("b").textContent.trim();
+
+        if (status === "LIVE") {
+            linha.style.backgroundColor = "#b9ffb9";
+            linha.dataset.online = "1";
+        } else {
+            linha.style.backgroundColor = "";
+            linha.dataset.online = "0";
+        }
+
+        processadas.push(linha.dataset.online);
+    });
+
+    linhas.sort((a, b) => b.dataset.online - a.dataset.online);
+
+    linhas.forEach(linha => tbody.appendChild(linha));
+
+}
+</script>
+
+
+
+<!--<script>-->
+<!--function ordenarTabela() {-->
+<!--    const tabela = document.querySelector("#tabela_1 tbody");-->
+<!--    const linhas = Array.from(tabela.querySelectorAll("tr"));-->
+
+<!--    alert("Total de linhas encontradas: " + linhas.length);-->
+
+<!--    linhas.forEach((linha, i) => {-->
+<!--        const colunaCanais = linha.querySelectorAll("td")[3];-->
+<!--        const segundoA = colunaCanais.querySelectorAll("a")[1];-->
+<!--        const textoStatus = segundoA.querySelector("b").textContent.trim();-->
+
+<!--        alert("Linha " + (i+1) + " → Status encontrado: " + textoStatus);-->
+
+<!--        linha.dataset.ordem = textoStatus === "LIVE" ? 1 : 0;-->
+<!--    });-->
+
+<!--    linhas.sort((a, b) => b.dataset.ordem - a.dataset.ordem);-->
+
+<!--    linhas.forEach(l => tabela.appendChild(l));-->
+
+<!--    alert("Tabela reorganizada!");-->
+<!--}-->
+<!--</script>-->
+
+
+
+<!--<script>-->
+<!--function ordenarPorLive() {-->
+<!--    const tabela = document.getElementById("tabela_1");-->
+<!--    const tbody = tabela.querySelector("tbody");-->
+
+<!--    let linhas = Array.from(tbody.querySelectorAll("tr"));-->
+
+<!--    linhas.sort((linhaA, linhaB) => {-->
+<!--        const aLive = temLiveNaSegundaA(linhaA) ? 1 : 0;-->
+<!--        const bLive = temLiveNaSegundaA(linhaB) ? 1 : 0;-->
+<!--        return bLive - aLive;-->
+<!--    });-->
+<!--    linhas.forEach(linha => tbody.appendChild(linha));-->
+<!--}-->
+
+<!--function temLiveNaSegundaA(linha) {-->
+<!--    const colunaCanais = linha.querySelectorAll("td")[3 + 1];-->
+<!--    if (!colunaCanais) return false;-->
+<!--    const links = colunaCanais.querySelectorAll("a");-->
+<!--    if (links.length < 2) return false;-->
+<!--    const segundaA = links[1];-->
+<!--    const bTag = segundaA.querySelector("b");-->
+<!--    if (!bTag) return false;-->
+<!--    return bTag.textContent.trim().toUpperCase() === "LIVE";-->
+<!--}-->
+<!--</script>-->
+
+
+
 {% endblock %}
