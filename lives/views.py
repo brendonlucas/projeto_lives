@@ -10,6 +10,12 @@ def home_page(request):
         canais = Canal.objects.all()
         return render(request, '../templates/home_page.html', {'facs': facs, 'canais': canais})
 
+def pagina_inicio(request):
+    if request.method == 'GET':
+        facs = Fac.objects.all()
+        canais = Canal.objects.all()
+        return render(request, '../templates/home.html', {'facs': facs, 'canais': canais})
+
 
 def add_fac(request):
     if request.method == 'POST':

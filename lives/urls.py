@@ -4,7 +4,8 @@ from django.urls import include
 from lives import views
 
 urlpatterns = [
-    path('', views.home_page, name='home_page'),
+    path('', views.pagina_inicio, name='home_page'),
+    # path('', views.home_page, name='home_page'),
     path('add/', views.add_fac, name='add_fac'),
     path('fac/<pk>', views.show_live_fac, name='show_live_fac'),
     path('streamer/', views.add_streamer, name='add_streamer'),

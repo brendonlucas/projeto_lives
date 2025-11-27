@@ -1,10 +1,43 @@
 {% extends 'base.html' %}
 {% block 'content' %}
+<style>
+    .custom-card {
+        width: 100%;
+        padding: 20px 15px;
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .custom-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+    }
+
+    /* Imagem redonda com sombra */
+    .profile-img {
+        width: 130px;
+        height: 130px;
+        object-fit: cover;
+        border-radius: 50%;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+
+    /* Botão inferior */
+    .card-btn {
+        margin-top: 20px;
+        border-radius: 0 0 14px 14px;
+        font-weight: bold;
+        padding: 10px;
+    }
+</style>
+
+
 <section class="shadow-card theme-select" style=" padding:20px;margin:10px; border-radius:10px">
     <div class="card" style="padding:10px 10px 0px 10px; margin:10px">
-        <div class="d-flex">
+        <div class="d-flex ">
             <div class="mr-auto p-2 align-self-center"><h3> {{ fac.nome }}</h3></div>
-
             <div class="form-group d-flex p-2">
                 <label class="form-label p-2" for="facSelect">Fac:</label>
                 <select class="form-control" id="facSelect" style="max-width:150px">
@@ -32,14 +65,6 @@
                 </div>
             </div>
             <div class="p-2">
-                <!--                <form method="post" action="#" class="input-group"-->
-                <!--                      style="max-width: 200px; margin-left:auto; float:right ">-->
-                <!--                    <input type="hidden" name="csrfmiddlewaretoken"-->
-                <!--                           value="dVP1lUMwIuWRiDiYoqjV45BnrByr4N4i812nz3CNUIfY45Z3OeBluPmwB5bn77bn">-->
-                <!--                    <input type="search" class="form-control rounded" placeholder="Buscar" aria-label="Search"-->
-                <!--                           aria-describedby="search-addon" id="myFilter" onkeyup="myFunction()">-->
-                <!--                    <button type="submit" class="btn btn-primary" ><i class="ti-search"></i></button>-->
-                <!--                </form>-->
                 <button type="submit" class="btn btn-primary" onclick="ordenarTabela()"><i class="ti-search"></i>
                     ordenar
                 </button>
@@ -136,86 +161,24 @@
             </div>
         </div>
     </div>
-
-
     <div class="card" style="padding:10px 10px 10px 10px; margin:10px">
-        <div class="card" style="" id="card_tabela">
-            <table class="table theme-select" id="tabela_1">
-                <thead class="thead-dark ">
-                <tr>
-                    <th scope="col">N°</th>
-                    <th scope="col">Nome do canal</th>
-                    <th scope="col">Nick em game</th>
-                    <th scope="col">fac</th>
-                    <th scope="col">Canais</th>
-                    <th scope="col">Opçoes</th>
-
-                </tr>
-                </thead>
-                <tbody>
-                {% for canal in canais %}
-                <tr>
-                    <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ canal.nome }}</td>
-                    <td>{{ canal.nick_player }}</td>
-                    <td>{{ canal.fac_player.nome }}</td>
-                    <td>
-                        <a class="btn btn-outline-danger btn-sm active" href="{{ canal.link_yt }}" target="_blank"><img
-                                src="https://img.icons8.com/?size=100&id=fN3hHbnVavBm&format=png&color=000000"
-                                width="25px"
-                                height="25px">
-                            <b>OFF</b>
-                        </a>
-                        <a class="btn btn-outline-secondary btn-sm active" href="{{ canal.link_tw }}" target="_blank" ><img
-                                src="https://img.icons8.com/?size=100&id=18103&format=png&color=000000" width="25px"
-                                height="25px">
-                            <b id="statusTag{{ canal.nome }}">OFF</b>
-                        </a>
-                        <script>
-                            async function checkTwitchStatus() {
-                                const channel = "{{ canal.nome }}";
-                                const url = `https://decapi.me/twitch/uptime/${channel}`;
-                                try {
-                                    const response = await fetch(url);
-                                    const text = await response.text();
-                                    const statusTag = document.getElementById("statusTag{{ canal.nome }}");
-                                    if (text.toLowerCase().includes("offline")) {
-                                        statusTag.textContent = "OFF";
-                                        console.log(text);
-                                    }
-                                    else {
-                                        statusTag.textContent = "LIVE";
-                                        console.log(text);
-                                    }
-                                } catch (error) {
-                                    console.error("Erro ao consultar API decapi.me", error);
-                                }
-                            }
-
-                            checkTwitchStatus();
-
-                        </script>
-
-
-                        <a class="btn btn-outline-success btn-sm active " href="{{ canal.link_kick }}" target="_blank"><img
-                                src="https://cdn.brandfetch.io/id3gkQXO6j/w/400/h/400/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1752548681236"
-                                width="25px"
-                                height="25px">
-                            <b>OFF</b>
-                        </a>
-                    </td>
-                    <td>
-                        <a class="btn btn-sm" href="{% url 'del_canal' pk=canal.id %}"><img
-                                src="https://img.icons8.com/?size=100&id=1941&format=png&color=000000"
-                                width="25px"
-                                height="25px">
-                        </a>
-                    </td>
-                </tr>
+        <div class="container mt-4 ">
+            <div class="row">
+                {% for fac in facs %}
+                <div class="col-md-3 mb-4 d-flex justify-content-center ">
+                    <div class="custom-card text-center shadow-card theme-select">
+                        <!-- Imagem circular -->
+                        <img src="https://i.pinimg.com/originals/29/47/9b/29479ba0435741580ca9f4a467be6207.png" class="profile-img" alt="Imagem">
+                        <!-- Nome -->
+                        <h5 class="mt-3">{{ fac.nome }}</h5>
+                        <!-- Botão -->
+                        <a href="{% url 'show_live_fac' fac.pk %}" class="btn btn-primary btn-block card-btn">Visualizar</a>
+                    </div>
+                </div>
                 {% endfor %}
-                </tbody>
-            </table>
+            </div>
         </div>
+
 
     </div>
 </section>
@@ -229,54 +192,5 @@
         }
     });
 </script>
-
-<script>
-    function ordenarTabela() {
-        const tabela = document.getElementById("tabela_1");
-        const tbody = tabela.querySelector("tbody");
-        const linhas = Array.from(tbody.querySelectorAll("tr"));
-
-        const processadas = [];
-
-        linhas.forEach((linha, index) => {
-            const colunaCanais = linha.querySelector("td:nth-child(5)");
-            const segundoLink = colunaCanais.querySelectorAll("a")[1];
-            const status = segundoLink.querySelector("b").textContent.trim();
-
-            if (status === "LIVE") {
-                linha.style.backgroundColor = "#57abff";
-                linha.dataset.online = "1";
-            } else {
-                linha.style.backgroundColor = "";
-                linha.dataset.online = "0";
-            }
-
-            processadas.push(linha.dataset.online);
-        });
-
-        linhas.sort((a, b) => b.dataset.online - a.dataset.online);
-
-        linhas.forEach(linha => tbody.appendChild(linha));
-        atualizarNumeracao();
-
-    }
-</script>
-
-<script>
-    function atualizarNumeracao() {
-    const linhas = document.querySelectorAll("#tabela_1 tbody tr");
-    let contador = 1;
-
-    linhas.forEach(linha => {
-        const th = linha.querySelector("th[scope='row']");
-        if (th) {
-            th.textContent = contador++;
-        }
-    });
-}
-
-
-</script>
-
 
 {% endblock %}
